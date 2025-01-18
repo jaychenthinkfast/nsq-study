@@ -33,6 +33,8 @@ nsqd 是核心服务, nsqlookupd 是 nsqd 的发现服务, nsqadmin 是 nsqd 的
 
 nsqd用于客户端消费和生产消息，它可以通过注册到 nsqlookupd 暴露给客户端来消费消息。
 
+![](image/2913-0.jpg)
+
 然后可以用 docker-compose ps  查看容器状态和端口映射情况
 ```
 CONTAINER ID   IMAGE       COMMAND                   CREATED         STATUS         PORTS                                                            NAMES
@@ -48,7 +50,7 @@ CONTAINER ID   IMAGE       COMMAND                   CREATED         STATUS     
 curl -d 'hello world 1' 'http://127.0.0.1:4151/pub?topic=test'
 ```
 可以在http://0.0.0.0:4171/topics/test 下查看topic详情,可以看到
-![](image/1.png)
+![](image/2913_1-scaled.jpg)
 这里的 nsqd host就是 nsqd的容器 id,目前没有 channel 消费者,所以消息会一直存在,此时消息的积压是 1（depth),
 而且都是积压在内存的，内存 1 磁盘 0 条。这时如果突然断电，内存消息就丢了，他的内部结构起是就是一个buffer chan，只有消息积压超过 chan size 才会落盘，
 这是 nsq的设计特点，如果确认业务可以接受这个特性。
@@ -85,7 +87,7 @@ cat  /tmp/test.chenjiedeMacBook-Pro-88.2025-01-15_16.log
 hello world 1
 ```
 我们再看下 nsqadmin 下channel 消费情况http://0.0.0.0:4171/topics/test/nsq_to_file
-![](image/2.png)
+![](image/2913_2-scaled.jpg)
 当前 channel 有一个消费连接，已经消费完成一条。
 
 ## 程序处理消息
